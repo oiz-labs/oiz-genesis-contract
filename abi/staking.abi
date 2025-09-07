@@ -109,7 +109,7 @@
   },
   {
     "type": "function",
-    "name": "ERROR_WITHDRAW_BNB",
+    "name": "ERROR_WITHDRAW_OIZ",
     "inputs": [],
     "outputs": [
       {
@@ -252,7 +252,7 @@
   },
   {
     "type": "function",
-    "name": "INIT_BSC_RELAYER_FEE",
+    "name": "INIT_OIZ_RELAYER_FEE",
     "inputs": [],
     "outputs": [
       {
@@ -564,7 +564,7 @@
   },
   {
     "type": "function",
-    "name": "bscChainID",
+    "name": "oizChainID",
     "inputs": [],
     "outputs": [
       {

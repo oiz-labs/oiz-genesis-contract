@@ -11,8 +11,8 @@ program.option('-c, --chainId <chainId>', 'chain id', '714');
 program.option('-o, --output <output-file>', 'Genesis json file', './genesis.json');
 program.option('-t, --template <template>', 'Genesis template json', './genesis-template.json');
 program.option(
-  '--initLockedBNBOnTokenHub <initLockedBNBOnTokenHub>',
-  'initLockedBNBOnTokenHub',
+  '--initLockedOIZOnTokenHub <initLockedOIZOnTokenHub>',
+  'initLockedOIZOnTokenHub',
   '176405560900000000000000000'
 );
 program.parse(process.argv);
@@ -43,7 +43,7 @@ function readByteCode(key, contractFile) {
 
 // compile files
 Promise.all([
-  readByteCode('validatorContract', 'out/BSCValidatorSet.sol/BSCValidatorSet.json'),
+  readByteCode('validatorContract', 'out/OIZValidatorSet.sol/OIZValidatorSet.json'),
   readByteCode('systemRewardContract', 'out/SystemReward.sol/SystemReward.json'),
   readByteCode('slashContract', 'out/SlashIndicator.sol/SlashIndicator.json'),
   readByteCode('tendermintLightClient', 'out/TendermintLightClient.sol/TendermintLightClient.json'),
@@ -56,13 +56,13 @@ Promise.all([
   readByteCode('staking', 'out/Staking.sol/Staking.json'),
   readByteCode('stakeHub', 'out/StakeHub.sol/StakeHub.json'),
   readByteCode('stakeCredit', 'out/StakeCredit.sol/StakeCredit.json'),
-  readByteCode('governor', 'out/BSCGovernor.sol/BSCGovernor.json'),
+  readByteCode('governor', 'out/OIZGovernor.sol/OIZGovernor.json'),
   readByteCode('govToken', 'out/GovToken.sol/GovToken.json'),
-  readByteCode('timelock', 'out/BSCTimelock.sol/BSCTimelock.json'),
+  readByteCode('timelock', 'out/OIZTimelock.sol/OIZTimelock.json'),
   readByteCode('tokenRecoverPortal', 'out/TokenRecoverPortal.sol/TokenRecoverPortal.json'),
 ]).then((result) => {
   const data = {
-    initLockedBNBOnTokenHub: program.initLockedBNBOnTokenHub,
+    initLockedOIZOnTokenHub: program.initLockedOIZOnTokenHub,
     chainId: program.chainId,
     initHolders: init_holders,
     extraData: web3.utils.bytesToHex(validators.extraValidatorBytes),

@@ -19,18 +19,18 @@ interface TokenHub {
     event WithdrawUnlockedToken(address indexed tokenAddr, address indexed recipient, uint256 amount);
     event paramChange(string key, bytes value);
     event receiveDeposit(address from, uint256 amount);
-    event refundFailure(address bep20Addr, address refundAddr, uint256 amount, uint32 status);
-    event refundSuccess(address bep20Addr, address refundAddr, uint256 amount, uint32 status);
+    event refundFailure(address oiz20Addr, address refundAddr, uint256 amount, uint32 status);
+    event refundSuccess(address oiz20Addr, address refundAddr, uint256 amount, uint32 status);
     event rewardTo(address to, uint256 amount);
-    event transferInSuccess(address bep20Addr, address refundAddr, uint256 amount);
-    event transferOutSuccess(address bep20Addr, address senderAddr, uint256 amount, uint256 relayFee);
+    event transferInSuccess(address oiz20Addr, address refundAddr, uint256 amount);
+    event transferOutSuccess(address oiz20Addr, address senderAddr, uint256 amount, uint256 relayFee);
     event unexpectedPackage(uint8 channelId, bytes msgBytes);
 
     receive() external payable;
 
     function BC_FUSION_CHANNELID() external view returns (uint8);
     function BEP2_TOKEN_DECIMALS() external view returns (uint8);
-    function BEP2_TOKEN_SYMBOL_FOR_BNB() external view returns (bytes32);
+    function BEP2_TOKEN_SYMBOL_FOR_OIZ() external view returns (bytes32);
     function BIND_CHANNELID() external view returns (uint8);
     function CODE_OK() external view returns (uint32);
     function CROSS_CHAIN_CONTRACT_ADDR() external view returns (address);
@@ -41,16 +41,16 @@ interface TokenHub {
     function GOV_HUB_ADDR() external view returns (address);
     function GOV_TOKEN_ADDR() external view returns (address);
     function INCENTIVIZE_ADDR() external view returns (address);
-    function INIT_BNB_LARGE_TRANSFER_LIMIT() external view returns (uint256);
+    function INIT_OIZ_LARGE_TRANSFER_LIMIT() external view returns (uint256);
     function INIT_LOCK_PERIOD() external view returns (uint256);
     function INIT_MINIMUM_RELAY_FEE() external view returns (uint256);
     function LIGHT_CLIENT_ADDR() external view returns (address);
     function LOCK_PERIOD_FOR_TOKEN_RECOVER() external view returns (uint256);
-    function MAXIMUM_BEP20_SYMBOL_LEN() external view returns (uint8);
+    function MAXIMUM_OIZ20_SYMBOL_LEN() external view returns (uint8);
     function MAX_BEP2_TOTAL_SUPPLY() external view returns (uint256);
-    function MAX_GAS_FOR_CALLING_BEP20() external view returns (uint256);
-    function MAX_GAS_FOR_TRANSFER_BNB() external view returns (uint256);
-    function MINIMUM_BEP20_SYMBOL_LEN() external view returns (uint8);
+    function MAX_GAS_FOR_CALLING_OIZ20() external view returns (uint256);
+    function MAX_GAS_FOR_TRANSFER_OIZ() external view returns (uint256);
+    function MINIMUM_OIZ20_SYMBOL_LEN() external view returns (uint8);
     function RELAYERHUB_CONTRACT_ADDR() external view returns (address);
     function REWARD_UPPER_LIMIT() external view returns (uint256);
     function SLASH_CHANNELID() external view returns (uint8);
@@ -75,23 +75,23 @@ interface TokenHub {
     function TRANSFER_OUT_CHANNELID() external view returns (uint8);
     function VALIDATOR_CONTRACT_ADDR() external view returns (address);
     function alreadyInit() external view returns (bool);
-    function batchTransferOutBNB(
+    function batchTransferOutOIZ(
         address[] memory recipientAddrs,
         uint256[] memory amounts,
         address[] memory refundAddrs,
         uint64 expireTime
     ) external payable returns (bool);
-    function bep20ContractDecimals(address) external view returns (uint256);
-    function bindToken(bytes32 bep2Symbol, address contractAddr, uint256 decimals) external;
-    function bscChainID() external view returns (uint16);
+    function oiz20ContractDecimals(address) external view returns (uint256);
+    function bindToken(bytes32 oiz2Symbol, address contractAddr, uint256 decimals) external;
+    function oizChainID() external view returns (uint16);
     function cancelTokenRecoverLock(bytes32 tokenSymbol, address attacker) external;
     function cancelTransferIn(address tokenAddress, address attacker) external;
     function claimMigrationFund(uint256 amount) external returns (bool);
     function claimRewards(address payable to, uint256 amount) external returns (uint256);
     function getBep2SymbolByContractAddr(address contractAddr) external view returns (bytes32);
     function getBoundBep2Symbol(address contractAddr) external view returns (string memory);
-    function getBoundContract(string memory bep2Symbol) external view returns (address);
-    function getContractAddrByBEP2Symbol(bytes32 bep2Symbol) external view returns (address);
+    function getBoundContract(string memory oiz2Symbol) external view returns (address);
+    function getContractAddrByBEP2Symbol(bytes32 oiz2Symbol) external view returns (address);
     function getMiniRelayFee() external view returns (uint256);
     function handleAckPackage(uint8 channelId, bytes memory msgBytes) external;
     function handleFailAckPackage(uint8 channelId, bytes memory msgBytes) external;
@@ -102,15 +102,15 @@ interface TokenHub {
     function lockPeriod() external view returns (uint256);
     function recoverBCAsset(bytes32 tokenSymbol, address recipient, uint256 amount) external;
     function relayFee() external view returns (uint256);
-    function setLargeTransferLimit(address bep20Token, uint256 largeTransferLimit) external;
+    function setLargeTransferLimit(address oiz20Token, uint256 largeTransferLimit) external;
     function transferOut(
         address contractAddr,
         address recipient,
         uint256 amount,
         uint64 expireTime
     ) external payable returns (bool);
-    function unbindToken(bytes32 bep2Symbol, address contractAddr) external;
+    function unbindToken(bytes32 oiz2Symbol, address contractAddr) external;
     function updateParam(string memory key, bytes memory value) external;
-    function withdrawStakingBNB(uint256 amount) external returns (bool);
+    function withdrawStakingOIZ(uint256 amount) external returns (bool);
     function withdrawUnlockedToken(address tokenAddress, address recipient) external;
 }

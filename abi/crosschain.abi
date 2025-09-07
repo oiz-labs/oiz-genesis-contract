@@ -560,7 +560,7 @@
   },
   {
     "type": "function",
-    "name": "bscChainID",
+    "name": "oizChainID",
     "inputs": [],
     "outputs": [
       {

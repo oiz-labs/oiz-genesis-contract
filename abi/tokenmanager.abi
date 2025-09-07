@@ -287,7 +287,7 @@
   },
   {
     "type": "function",
-    "name": "MAXIMUM_BEP20_SYMBOL_LEN",
+    "name": "MAXIMUM_OIZ20_SYMBOL_LEN",
     "inputs": [],
     "outputs": [
       {
@@ -313,7 +313,7 @@
   },
   {
     "type": "function",
-    "name": "MAX_GAS_FOR_TRANSFER_BNB",
+    "name": "MAX_GAS_FOR_TRANSFER_OIZ",
     "inputs": [],
     "outputs": [
       {
@@ -326,7 +326,7 @@
   },
   {
     "type": "function",
-    "name": "MINIMUM_BEP20_SYMBOL_LEN",
+    "name": "MINIMUM_OIZ20_SYMBOL_LEN",
     "inputs": [],
     "outputs": [
       {
@@ -672,7 +672,7 @@
         "internalType": "address"
       },
       {
-        "name": "bep2Symbol",
+        "name": "oiz2Symbol",
         "type": "string",
         "internalType": "string"
       }
@@ -703,7 +703,7 @@
         "internalType": "uint8"
       },
       {
-        "name": "bep2TokenSymbol",
+        "name": "oiz2TokenSymbol",
         "type": "bytes32",
         "internalType": "bytes32"
       },
@@ -723,7 +723,7 @@
         "internalType": "uint256"
       },
       {
-        "name": "bep20Decimals",
+        "name": "oiz20Decimals",
         "type": "uint8",
         "internalType": "uint8"
       },
@@ -756,7 +756,7 @@
   },
   {
     "type": "function",
-    "name": "bscChainID",
+    "name": "oizChainID",
     "inputs": [],
     "outputs": [
       {
@@ -772,7 +772,7 @@
     "name": "expireBind",
     "inputs": [
       {
-        "name": "bep2Symbol",
+        "name": "oiz2Symbol",
         "type": "string",
         "internalType": "string"
       }
@@ -851,7 +851,7 @@
     "name": "mirror",
     "inputs": [
       {
-        "name": "bep20Addr",
+        "name": "oiz20Addr",
         "type": "address",
         "internalType": "address"
       },
@@ -931,7 +931,7 @@
         "internalType": "address"
       },
       {
-        "name": "bep2Symbol",
+        "name": "oiz2Symbol",
         "type": "string",
         "internalType": "string"
       }
@@ -950,7 +950,7 @@
     "name": "sync",
     "inputs": [
       {
-        "name": "bep20Addr",
+        "name": "oiz20Addr",
         "type": "address",
         "internalType": "address"
       },
@@ -1011,7 +1011,7 @@
         "internalType": "address"
       },
       {
-        "name": "bep2Symbol",
+        "name": "oiz2Symbol",
         "type": "string",
         "indexed": false,
         "internalType": "string"
@@ -1036,7 +1036,7 @@
         "internalType": "address"
       },
       {
-        "name": "bep2Symbol",
+        "name": "oiz2Symbol",
         "type": "string",
         "indexed": false,
         "internalType": "string"
@@ -1061,7 +1061,7 @@
     "name": "mirrorFailure",
     "inputs": [
       {
-        "name": "bep20Addr",
+        "name": "oiz20Addr",
         "type": "address",
         "indexed": true,
         "internalType": "address"
@@ -1080,13 +1080,13 @@
     "name": "mirrorSuccess",
     "inputs": [
       {
-        "name": "bep20Addr",
+        "name": "oiz20Addr",
         "type": "address",
         "indexed": true,
         "internalType": "address"
       },
       {
-        "name": "bep2Symbol",
+        "name": "oiz2Symbol",
         "type": "bytes32",
         "indexed": false,
         "internalType": "bytes32"
@@ -1118,7 +1118,7 @@
     "name": "syncFailure",
     "inputs": [
       {
-        "name": "bep20Addr",
+        "name": "oiz20Addr",
         "type": "address",
         "indexed": true,
         "internalType": "address"
@@ -1137,7 +1137,7 @@
     "name": "syncSuccess",
     "inputs": [
       {
-        "name": "bep20Addr",
+        "name": "oiz20Addr",
         "type": "address",
         "indexed": true,
         "internalType": "address"

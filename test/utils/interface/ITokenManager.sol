@@ -2,13 +2,13 @@
 pragma solidity ^0.8.10;
 
 interface TokenManager {
-    event bindFailure(address indexed contractAddr, string bep2Symbol, uint32 failedReason);
-    event bindSuccess(address indexed contractAddr, string bep2Symbol, uint256 totalSupply, uint256 peggyAmount);
-    event mirrorFailure(address indexed bep20Addr, uint8 errCode);
-    event mirrorSuccess(address indexed bep20Addr, bytes32 bep2Symbol);
+    event bindFailure(address indexed contractAddr, string oiz2Symbol, uint32 failedReason);
+    event bindSuccess(address indexed contractAddr, string oiz2Symbol, uint256 totalSupply, uint256 peggyAmount);
+    event mirrorFailure(address indexed oiz20Addr, uint8 errCode);
+    event mirrorSuccess(address indexed oiz20Addr, bytes32 oiz2Symbol);
     event paramChange(string key, bytes value);
-    event syncFailure(address indexed bep20Addr, uint8 errCode);
-    event syncSuccess(address indexed bep20Addr);
+    event syncFailure(address indexed oiz20Addr, uint8 errCode);
+    event syncSuccess(address indexed oiz20Addr);
     event unexpectedPackage(uint8 channelId, bytes msgBytes);
 
     function BC_FUSION_CHANNELID() external view returns (uint8);
@@ -33,10 +33,10 @@ interface TokenManager {
     function INCENTIVIZE_ADDR() external view returns (address);
     function LIGHT_CLIENT_ADDR() external view returns (address);
     function LOG_MAX_UINT256() external view returns (uint256);
-    function MAXIMUM_BEP20_SYMBOL_LEN() external view returns (uint8);
+    function MAXIMUM_OIZ20_SYMBOL_LEN() external view returns (uint8);
     function MAX_BEP2_TOTAL_SUPPLY() external view returns (uint256);
-    function MAX_GAS_FOR_TRANSFER_BNB() external view returns (uint256);
-    function MINIMUM_BEP20_SYMBOL_LEN() external view returns (uint8);
+    function MAX_GAS_FOR_TRANSFER_OIZ() external view returns (uint256);
+    function MINIMUM_OIZ20_SYMBOL_LEN() external view returns (uint8);
     function MIRROR_CHANNELID() external view returns (uint8);
     function MIRROR_STATUS_ALREADY_BOUND() external view returns (uint8);
     function MIRROR_STATUS_DUPLICATED_BEP2_SYMBOL() external view returns (uint8);
@@ -62,31 +62,31 @@ interface TokenManager {
     function UNBIND_PACKAGE() external view returns (uint8);
     function VALIDATOR_CONTRACT_ADDR() external view returns (address);
     function alreadyInit() external view returns (bool);
-    function approveBind(address contractAddr, string memory bep2Symbol) external payable returns (bool);
+    function approveBind(address contractAddr, string memory oiz2Symbol) external payable returns (bool);
     function bindPackageRecord(bytes32)
         external
         view
         returns (
             uint8 packageType,
-            bytes32 bep2TokenSymbol,
+            bytes32 oiz2TokenSymbol,
             address contractAddr,
             uint256 totalSupply,
             uint256 peggyAmount,
-            uint8 bep20Decimals,
+            uint8 oiz20Decimals,
             uint64 expireTime
         );
     function boundByMirror(address) external view returns (bool);
-    function bscChainID() external view returns (uint16);
-    function expireBind(string memory bep2Symbol) external payable returns (bool);
+    function oizChainID() external view returns (uint16);
+    function expireBind(string memory oiz2Symbol) external payable returns (bool);
     function handleAckPackage(uint8 channelId, bytes memory msgBytes) external;
     function handleFailAckPackage(uint8 channelId, bytes memory msgBytes) external;
     function handleSynPackage(uint8 channelId, bytes memory msgBytes) external returns (bytes memory);
-    function mirror(address bep20Addr, uint64 expireTime) external payable returns (bool);
+    function mirror(address oiz20Addr, uint64 expireTime) external payable returns (bool);
     function mirrorFee() external view returns (uint256);
     function mirrorPendingRecord(address) external view returns (bool);
     function queryRequiredLockAmountForBind(string memory symbol) external view returns (uint256);
-    function rejectBind(address contractAddr, string memory bep2Symbol) external payable returns (bool);
-    function sync(address bep20Addr, uint64 expireTime) external payable returns (bool);
+    function rejectBind(address contractAddr, string memory oiz2Symbol) external payable returns (bool);
+    function sync(address oiz20Addr, uint64 expireTime) external payable returns (bool);
     function syncFee() external view returns (uint256);
     function updateParam(string memory key, bytes memory value) external;
 }

@@ -12,7 +12,7 @@ contract Staking is IStaking, System, IParamSubscriber, IApplication {
     uint256 public constant TEN_DECIMALS = 1e10;
 
     uint256 public constant INIT_RELAYER_FEE = 16 * 1e15;
-    uint256 public constant INIT_BSC_RELAYER_FEE = 1 * 1e16;
+    uint256 public constant INIT_OIZ_RELAYER_FEE = 1 * 1e16;
     uint256 public constant INIT_MIN_DELEGATION = 100 * 1e18;
     uint256 public constant INIT_TRANSFER_GAS = 2300;
 
@@ -53,7 +53,7 @@ contract Staking is IStaking, System, IParamSubscriber, IApplication {
     modifier initParams() {
         if (!alreadyInit) {
             relayerFee = INIT_RELAYER_FEE;
-            bSCRelayerFee = INIT_BSC_RELAYER_FEE;
+            bSCRelayerFee = INIT_OIZ_RELAYER_FEE;
             minDelegation = INIT_MIN_DELEGATION;
             transferGas = INIT_TRANSFER_GAS;
             alreadyInit = true;
@@ -115,10 +115,10 @@ contract Staking is IStaking, System, IParamSubscriber, IApplication {
     }
 
     /**
-     * @dev Undelegate BNB from BC to BSC
+     * @dev Undelegate OIZ from BC to OIZ
      *
      * @param validator BC validator encoded address the user delegated
-     * @param amount BNB amount the user undelegates
+     * @param amount OIZ amount the user undelegates
      */
     function undelegate(
         address validator,
@@ -149,7 +149,7 @@ contract Staking is IStaking, System, IParamSubscriber, IApplication {
     }
 
     /**
-     * @dev claim undelegated BNB from BC staking
+     * @dev claim undelegated OIZ from BC staking
      *
      */
     function claimUndelegated() external override noReentrant returns (uint256 amount) {

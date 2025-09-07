@@ -59,16 +59,16 @@ const TOKEN_RECOVER_PORTAL_ADDR = '0x0000000000000000000000000000000000003000';
 contractNameMap[TOKEN_RECOVER_PORTAL_ADDR] = 'TokenRecoverPortalContract'
 
 let hardforkName = process.env.HARDFORK
-let bscUrl = process.env.BSC_URL
-let bscRepoDir = '/tmp/bsc'
+let oizUrl = process.env.OIZ_URL
+let oizRepoDir = '/tmp/oiz'
 
 const checkHardforkBytecode = async () => {
-  const bscHardforkBytecodeDir = bscRepoDir + '/core/systemcontracts/' + hardforkName
-  const mainnetDir = bscHardforkBytecodeDir + '/mainnet'
-  const testnetDir = bscHardforkBytecodeDir + '/chapel'
+  const oizHardforkBytecodeDir = oizRepoDir + '/core/systemcontracts/' + hardforkName
+  const mainnetDir = oizHardforkBytecodeDir + '/mainnet'
+  const testnetDir = oizHardforkBytecodeDir + '/chapel'
 
   log('---------------------------------------------------------------------------')
-  log(`Mainnet: compare genesis bytecode with bsc repo`)
+  log(`Mainnet: compare genesis bytecode with oiz repo`)
   const mainnetHardforkFiles = await searchFiles(mainnetDir, 'Contract')
   if (mainnetHardforkFiles.length === 0) {
     throw new Error(`cannot find any files in ${mainnetDir}`)
@@ -77,7 +77,7 @@ const checkHardforkBytecode = async () => {
   await compareGenesisWithHardforkBytecodes(mainnetGenesis, mainnetHardforkFiles)
 
   log('---------------------------------------------------------------------------')
-  log(`Testnet: compare genesis bytecode with bsc repo`)
+  log(`Testnet: compare genesis bytecode with oiz repo`)
   const testnetHardforkFiles = await searchFiles(testnetDir, 'Contract')
   if (testnetHardforkFiles.length === 0) {
     throw new Error(`cannot find any files in ${testnetDir}`)
@@ -100,15 +100,15 @@ const compareGenesisWithHardforkBytecodes = async (genesisFile: string, files: s
     log(contractName, addr)
     log('bytecode from genesis:', bytecode.length, )
 
-    const bytecodeFromBsc = getBytecodeFromBscRepo(contractName, files)
-    if (!bytecodeFromBsc) {
-      log(`cannot find bytecode for ${contractName} in bsc repo`)
+    const bytecodeFromOiz = getBytecodeFromOizRepo(contractName, files)
+    if (!bytecodeFromOiz) {
+      log(`cannot find bytecode for ${contractName} in oiz repo`)
       continue;
     }
 
-    log('bytecode from bsc repo:', bytecodeFromBsc.length, )
+    log('bytecode from oiz repo:', bytecodeFromOiz.length, )
 
-    if (bytecode === bytecodeFromBsc) {
+    if (bytecode === bytecodeFromOiz) {
       log('Success!')
     } else {
       throw new Error(`bytecode not match for ${contractName}`)
@@ -116,7 +116,7 @@ const compareGenesisWithHardforkBytecodes = async (genesisFile: string, files: s
   }
 }
 
-const getBytecodeFromBscRepo = (contractName: string, files: string[]): string | undefined => {
+const getBytecodeFromOizRepo = (contractName: string, files: string[]): string | undefined => {
   for (let i = 0; i < files.length; i++) {
     const file = files[i]
     if (file.includes(`/${contractName}`)) {
@@ -163,19 +163,19 @@ const main = async () => {
     throw new Error('HARDFORK is required in .env')
   }
 
-  if (!bscUrl) {
-    throw new Error('BSC_URL is required in .env')
+  if (!oizUrl) {
+    throw new Error('OIZ_URL is required in .env')
   }
 
   hardforkName = hardforkName.trim()
-  bscUrl = bscUrl.trim()
+  oizUrl = oizUrl.trim()
 
-  const p= bscUrl.lastIndexOf('/')
-  const commitId = bscUrl.substring(p+1)
+  const p= oizUrl.lastIndexOf('/')
+  const commitId = oizUrl.substring(p+1)
 
   log('hardforkName', hardforkName, 'commitId', commitId)
 
-  execSync(`cd /tmp && git clone https://github.com/bnb-chain/bsc.git && cd bsc && git checkout ${commitId}`)
+  execSync(`cd /tmp && git clone https://github.com/oiz-labs/oiz.git && cd oiz && git checkout ${commitId}`)
 
   await sleep(5)
 

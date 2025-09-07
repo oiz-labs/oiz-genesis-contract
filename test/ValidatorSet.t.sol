@@ -30,24 +30,24 @@ contract ValidatorSetTest is Deployer {
     function setUp() public {
         // add operator
         bytes memory key = "addOperator";
-        bytes memory valueBytes = abi.encodePacked(address(bscValidatorSet));
+        bytes memory valueBytes = abi.encodePacked(address(oizValidatorSet));
         vm.expectEmit(false, false, false, true, address(systemReward));
         emit paramChange(string(key), valueBytes);
         _updateParamByGovHub(key, valueBytes, address(systemReward));
-        assertTrue(systemReward.isOperator(address(bscValidatorSet)));
+        assertTrue(systemReward.isOperator(address(oizValidatorSet)));
 
         burnRatio =
-            bscValidatorSet.isSystemRewardIncluded() ? bscValidatorSet.burnRatio() : bscValidatorSet.INIT_BURN_RATIO();
-        burnRatioScale = bscValidatorSet.BLOCK_FEES_RATIO_SCALE();
-        systemRewardBaseRatio = bscValidatorSet.isSystemRewardIncluded()
-            ? bscValidatorSet.systemRewardBaseRatio()
-            : bscValidatorSet.INIT_SYSTEM_REWARD_RATIO();
-        systemRewardRatioScale = bscValidatorSet.BLOCK_FEES_RATIO_SCALE();
-        totalInComing = bscValidatorSet.totalInComing();
-        maxNumOfWorkingCandidates = bscValidatorSet.maxNumOfWorkingCandidates();
-        numOfCabinets = bscValidatorSet.numOfCabinets();
+            oizValidatorSet.isSystemRewardIncluded() ? oizValidatorSet.burnRatio() : oizValidatorSet.INIT_BURN_RATIO();
+        burnRatioScale = oizValidatorSet.BLOCK_FEES_RATIO_SCALE();
+        systemRewardBaseRatio = oizValidatorSet.isSystemRewardIncluded()
+            ? oizValidatorSet.systemRewardBaseRatio()
+            : oizValidatorSet.INIT_SYSTEM_REWARD_RATIO();
+        systemRewardRatioScale = oizValidatorSet.BLOCK_FEES_RATIO_SCALE();
+        totalInComing = oizValidatorSet.totalInComing();
+        maxNumOfWorkingCandidates = oizValidatorSet.maxNumOfWorkingCandidates();
+        numOfCabinets = oizValidatorSet.numOfCabinets();
 
-        address[] memory validators = bscValidatorSet.getValidators();
+        address[] memory validators = oizValidatorSet.getValidators();
         validator0 = validators[0];
 
         coinbase = block.coinbase;
@@ -63,41 +63,41 @@ contract ValidatorSetTest is Deployer {
         vm.assume(amount <= 1e19);
 
         vm.expectRevert("the message sender must be the block producer");
-        bscValidatorSet.deposit{ value: amount }(validator0);
+        oizValidatorSet.deposit{ value: amount }(validator0);
 
         vm.startPrank(coinbase);
         vm.expectRevert("deposit value is zero");
-        bscValidatorSet.deposit(validator0);
+        oizValidatorSet.deposit(validator0);
 
         uint256 realAmount0 = _calcIncoming(amount);
-        vm.expectEmit(true, false, false, true, address(bscValidatorSet));
+        vm.expectEmit(true, false, false, true, address(oizValidatorSet));
         emit validatorDeposit(validator0, realAmount0);
-        bscValidatorSet.deposit{ value: amount }(validator0);
+        oizValidatorSet.deposit{ value: amount }(validator0);
 
         vm.stopPrank();
-        assertEq(bscValidatorSet.getTurnLength(), 8);
+        assertEq(oizValidatorSet.getTurnLength(), 8);
         bytes memory key = "turnLength";
         bytes memory value = bytes(hex"0000000000000000000000000000000000000000000000000000000000000005"); // 5
-        _updateParamByGovHub(key, value, address(bscValidatorSet));
-        assertEq(bscValidatorSet.getTurnLength(), 5);
+        _updateParamByGovHub(key, value, address(oizValidatorSet));
+        assertEq(oizValidatorSet.getTurnLength(), 5);
 
         key = "systemRewardAntiMEVRatio";
         value = bytes(hex"0000000000000000000000000000000000000000000000000000000000000200"); // 512
-        _updateParamByGovHub(key, value, address(bscValidatorSet));
-        assertEq(bscValidatorSet.systemRewardAntiMEVRatio(), 512);
+        _updateParamByGovHub(key, value, address(oizValidatorSet));
+        assertEq(oizValidatorSet.systemRewardAntiMEVRatio(), 512);
         vm.startPrank(coinbase);
 
         uint256 realAmount1 = _calcIncoming(amount);
-        vm.expectEmit(true, false, false, true, address(bscValidatorSet));
+        vm.expectEmit(true, false, false, true, address(oizValidatorSet));
         emit validatorDeposit(validator0, realAmount1);
-        bscValidatorSet.deposit{ value: amount }(validator0);
+        oizValidatorSet.deposit{ value: amount }(validator0);
 
         address newAccount = _getNextUserAddress();
-        vm.expectEmit(true, false, false, true, address(bscValidatorSet));
+        vm.expectEmit(true, false, false, true, address(oizValidatorSet));
         emit deprecatedDeposit(newAccount, realAmount1);
-        bscValidatorSet.deposit{ value: amount }(newAccount);
+        oizValidatorSet.deposit{ value: amount }(newAccount);
 
-        assertEq(bscValidatorSet.totalInComing(), totalInComing + realAmount0 + realAmount1);
+        assertEq(oizValidatorSet.totalInComing(), totalInComing + realAmount0 + realAmount1);
         vm.stopPrank();
     }
 
@@ -106,23 +106,23 @@ contract ValidatorSetTest is Deployer {
         bytes memory value = bytes(hex"0000000000000000000000000000000000000000000000000000000000000015"); // 21
         vm.expectEmit(false, false, false, true, address(govHub));
         emit failReasonWithStr("the maxNumOfWorkingCandidates must be not greater than maxNumOfCandidates");
-        _updateParamByGovHub(key, value, address(bscValidatorSet));
-        assertEq(bscValidatorSet.maxNumOfWorkingCandidates(), maxNumOfWorkingCandidates);
+        _updateParamByGovHub(key, value, address(oizValidatorSet));
+        assertEq(oizValidatorSet.maxNumOfWorkingCandidates(), maxNumOfWorkingCandidates);
 
         value = bytes(hex"000000000000000000000000000000000000000000000000000000000000000a"); // 10
-        _updateParamByGovHub(key, value, address(bscValidatorSet));
-        assertEq(bscValidatorSet.maxNumOfWorkingCandidates(), 10);
+        _updateParamByGovHub(key, value, address(oizValidatorSet));
+        assertEq(oizValidatorSet.maxNumOfWorkingCandidates(), 10);
 
         key = "maxNumOfCandidates";
         value = bytes(hex"0000000000000000000000000000000000000000000000000000000000000005"); // 5
-        _updateParamByGovHub(key, value, address(bscValidatorSet));
-        assertEq(bscValidatorSet.maxNumOfCandidates(), 5);
-        assertEq(bscValidatorSet.maxNumOfWorkingCandidates(), 5);
+        _updateParamByGovHub(key, value, address(oizValidatorSet));
+        assertEq(oizValidatorSet.maxNumOfCandidates(), 5);
+        assertEq(oizValidatorSet.maxNumOfWorkingCandidates(), 5);
 
         key = "systemRewardBaseRatio";
         value = bytes(hex"0000000000000000000000000000000000000000000000000000000000000400"); // 1024
-        _updateParamByGovHub(key, value, address(bscValidatorSet));
-        assertEq(bscValidatorSet.systemRewardBaseRatio(), 1024);
+        _updateParamByGovHub(key, value, address(oizValidatorSet));
+        assertEq(oizValidatorSet.systemRewardBaseRatio(), 1024);
     }
 
     function testValidateSetChange() public {
@@ -130,12 +130,12 @@ contract ValidatorSetTest is Deployer {
             (, address[] memory consensusAddrs, uint64[] memory votingPowers, bytes[] memory voteAddrs) =
                 _batchCreateValidators(5);
             vm.prank(coinbase);
-            bscValidatorSet.updateValidatorSetV2(consensusAddrs, votingPowers, voteAddrs);
+            oizValidatorSet.updateValidatorSetV2(consensusAddrs, votingPowers, voteAddrs);
 
-            address[] memory valSet = bscValidatorSet.getValidators();
+            address[] memory valSet = oizValidatorSet.getValidators();
             for (uint256 j; j < 5; ++j) {
                 assertEq(valSet[j], consensusAddrs[j], "consensus address not equal");
-                assertTrue(bscValidatorSet.isCurrentValidator(consensusAddrs[j]), "the address should be a validator");
+                assertTrue(oizValidatorSet.isCurrentValidator(consensusAddrs[j]), "the address should be a validator");
             }
         }
     }
@@ -144,16 +144,16 @@ contract ValidatorSetTest is Deployer {
         (, address[] memory consensusAddrs, uint64[] memory votingPowers, bytes[] memory voteAddrs) =
             _batchCreateValidators(41);
         vm.prank(coinbase);
-        bscValidatorSet.updateValidatorSetV2(consensusAddrs, votingPowers, voteAddrs);
+        oizValidatorSet.updateValidatorSetV2(consensusAddrs, votingPowers, voteAddrs);
 
-        address[] memory vals = bscValidatorSet.getValidators();
-        (address[] memory miningVals,) = bscValidatorSet.getMiningValidators();
+        address[] memory vals = oizValidatorSet.getValidators();
+        (address[] memory miningVals,) = oizValidatorSet.getMiningValidators();
 
         uint256 count;
         uint256 _numOfCabinets;
         uint256 _maxNumOfWorkingCandidates = maxNumOfWorkingCandidates;
         if (numOfCabinets == 0) {
-            _numOfCabinets = bscValidatorSet.INIT_NUM_OF_CABINETS();
+            _numOfCabinets = oizValidatorSet.INIT_NUM_OF_CABINETS();
         } else {
             _numOfCabinets = numOfCabinets;
         }
@@ -182,33 +182,33 @@ contract ValidatorSetTest is Deployer {
         ) = _batchCreateValidators(1);
 
         vm.startPrank(coinbase);
-        bscValidatorSet.updateValidatorSetV2(consensusAddrs, votingPowers, voteAddrs);
+        oizValidatorSet.updateValidatorSetV2(consensusAddrs, votingPowers, voteAddrs);
 
         address val = consensusAddrs[0];
         address deprecated = _getNextUserAddress();
-        vm.deal(address(bscValidatorSet), 0);
+        vm.deal(address(oizValidatorSet), 0);
 
         for (uint256 i; i < 5; ++i) {
-            bscValidatorSet.deposit{ value: 1 ether }(val);
-            bscValidatorSet.deposit{ value: 1 ether }(deprecated);
-            bscValidatorSet.deposit{ value: 0.1 ether }(val);
-            bscValidatorSet.deposit{ value: 0.1 ether }(deprecated);
+            oizValidatorSet.deposit{ value: 1 ether }(val);
+            oizValidatorSet.deposit{ value: 1 ether }(deprecated);
+            oizValidatorSet.deposit{ value: 0.1 ether }(val);
+            oizValidatorSet.deposit{ value: 0.1 ether }(deprecated);
         }
 
         uint256 expectedBalance = _calcIncoming(11 ether);
         uint256 expectedIncoming = _calcIncoming(5.5 ether);
-        uint256 balance = address(bscValidatorSet).balance;
-        uint256 incoming = bscValidatorSet.totalInComing();
+        uint256 balance = address(oizValidatorSet).balance;
+        uint256 incoming = oizValidatorSet.totalInComing();
         assertEq(balance, expectedBalance);
         assertEq(incoming, expectedIncoming);
 
         vm.expectEmit(true, false, false, true, address(stakeHub));
         emit RewardDistributed(operatorAddrs[0], expectedIncoming);
-        vm.expectEmit(false, false, false, true, address(bscValidatorSet));
+        vm.expectEmit(false, false, false, true, address(oizValidatorSet));
         emit systemTransfer(expectedBalance - expectedIncoming);
-        vm.expectEmit(false, false, false, false, address(bscValidatorSet));
+        vm.expectEmit(false, false, false, false, address(oizValidatorSet));
         emit validatorSetUpdated();
-        bscValidatorSet.updateValidatorSetV2(consensusAddrs, votingPowers, voteAddrs);
+        oizValidatorSet.updateValidatorSetV2(consensusAddrs, votingPowers, voteAddrs);
 
         vm.stopPrank();
     }
@@ -222,22 +222,22 @@ contract ValidatorSetTest is Deployer {
         ) = _batchCreateValidators(41);
 
         vm.startPrank(coinbase);
-        bscValidatorSet.updateValidatorSetV2(consensusAddrs, votingPowers, voteAddrs);
+        oizValidatorSet.updateValidatorSetV2(consensusAddrs, votingPowers, voteAddrs);
 
         for (uint256 i; i < 41; ++i) {
-            bscValidatorSet.deposit{ value: 1 ether }(consensusAddrs[i]);
+            oizValidatorSet.deposit{ value: 1 ether }(consensusAddrs[i]);
         }
         vm.stopPrank();
 
         (operatorAddrs, consensusAddrs, votingPowers, voteAddrs) = _batchCreateValidators(41);
         vm.prank(coinbase);
-        bscValidatorSet.updateValidatorSetV2(consensusAddrs, votingPowers, voteAddrs);
+        oizValidatorSet.updateValidatorSetV2(consensusAddrs, votingPowers, voteAddrs);
     }
 
     function testDistributeFinalityReward() public {
         address[] memory addrs = new address[](20);
         uint256[] memory weights = new uint256[](20);
-        address[] memory vals = bscValidatorSet.getValidators();
+        address[] memory vals = oizValidatorSet.getValidators();
         for (uint256 i; i < 10; ++i) {
             addrs[i] = vals[i];
             weights[i] = 1;
@@ -249,15 +249,15 @@ contract ValidatorSetTest is Deployer {
         }
 
         // failed case
-        uint256 ceil = bscValidatorSet.MAX_SYSTEM_REWARD_BALANCE();
+        uint256 ceil = oizValidatorSet.MAX_SYSTEM_REWARD_BALANCE();
         vm.deal(address(systemReward), ceil - 1);
         vm.expectRevert(bytes("the message sender must be the block producer"));
-        bscValidatorSet.distributeFinalityReward(addrs, weights);
+        oizValidatorSet.distributeFinalityReward(addrs, weights);
 
         vm.startPrank(coinbase);
-        bscValidatorSet.distributeFinalityReward(addrs, weights);
+        oizValidatorSet.distributeFinalityReward(addrs, weights);
         vm.expectRevert(bytes("can not do this twice in one block"));
-        bscValidatorSet.distributeFinalityReward(addrs, weights);
+        oizValidatorSet.distributeFinalityReward(addrs, weights);
 
         // success case
         // balanceOfSystemReward > MAX_SYSTEM_REWARD_BALANCE
@@ -266,15 +266,15 @@ contract ValidatorSetTest is Deployer {
         vm.roll(block.number + 1);
 
         uint256 expectReward = reward / 20;
-        vm.expectEmit(true, false, false, true, address(bscValidatorSet));
+        vm.expectEmit(true, false, false, true, address(oizValidatorSet));
         emit finalityRewardDeposit(addrs[0], expectReward);
-        vm.expectEmit(true, false, false, true, address(bscValidatorSet));
+        vm.expectEmit(true, false, false, true, address(oizValidatorSet));
         emit finalityRewardDeposit(addrs[9], expectReward);
-        vm.expectEmit(true, false, false, true, address(bscValidatorSet));
+        vm.expectEmit(true, false, false, true, address(oizValidatorSet));
         emit deprecatedFinalityRewardDeposit(addrs[10], expectReward);
-        vm.expectEmit(true, false, false, true, address(bscValidatorSet));
+        vm.expectEmit(true, false, false, true, address(oizValidatorSet));
         emit deprecatedFinalityRewardDeposit(addrs[19], expectReward);
-        bscValidatorSet.distributeFinalityReward(addrs, weights);
+        oizValidatorSet.distributeFinalityReward(addrs, weights);
         assertEq(address(systemReward).balance, ceil);
 
         // cannot exceed MAX_REWARDS
@@ -283,23 +283,23 @@ contract ValidatorSetTest is Deployer {
         vm.roll(block.number + 1);
 
         expectReward = cap / 20;
-        vm.expectEmit(true, false, false, true, address(bscValidatorSet));
+        vm.expectEmit(true, false, false, true, address(oizValidatorSet));
         emit finalityRewardDeposit(addrs[0], expectReward);
-        vm.expectEmit(true, false, false, true, address(bscValidatorSet));
+        vm.expectEmit(true, false, false, true, address(oizValidatorSet));
         emit finalityRewardDeposit(addrs[9], expectReward);
-        vm.expectEmit(true, false, false, true, address(bscValidatorSet));
+        vm.expectEmit(true, false, false, true, address(oizValidatorSet));
         emit deprecatedFinalityRewardDeposit(addrs[10], expectReward);
-        vm.expectEmit(true, false, false, true, address(bscValidatorSet));
+        vm.expectEmit(true, false, false, true, address(oizValidatorSet));
         emit deprecatedFinalityRewardDeposit(addrs[19], expectReward);
-        bscValidatorSet.distributeFinalityReward(addrs, weights);
+        oizValidatorSet.distributeFinalityReward(addrs, weights);
         assertEq(address(systemReward).balance, ceil + cap);
 
         vm.stopPrank();
     }
 
     function _calcIncoming(uint256 value) internal view returns (uint256 incoming) {
-        uint256 turnLength = bscValidatorSet.getTurnLength();
-        uint256 systemRewardAntiMEVRatio = bscValidatorSet.systemRewardAntiMEVRatio();
+        uint256 turnLength = oizValidatorSet.getTurnLength();
+        uint256 systemRewardAntiMEVRatio = oizValidatorSet.systemRewardAntiMEVRatio();
         uint256 systemRewardRatio = systemRewardBaseRatio;
         if (turnLength > 1 && systemRewardAntiMEVRatio > 0) {
             systemRewardRatio += systemRewardAntiMEVRatio * (block.number % turnLength) / (turnLength - 1);

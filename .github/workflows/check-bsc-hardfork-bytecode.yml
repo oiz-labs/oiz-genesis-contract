@@ -1,4 +1,4 @@
-name: Compare genesis with bytecode files from BSC repo
+name: Compare genesis with bytecode files from OIZ repo
 on:
   push:
     branches:
@@ -38,7 +38,7 @@ jobs:
           npm install ts-node -g
           npm install
 
-      - name: Extract BSC commitId and hardfork name from PR description
+      - name: Extract OIZ commitId and hardfork name from PR description
         uses: actions/github-script@v6
         id: extract_pr_description
         with:
@@ -52,12 +52,12 @@ jobs:
             }
             
             const info = JSON.parse(prBody.substring(p1 + 3, p2))
-            console.log('info', info, info.hardfork, info.bsc)
+            console.log('info', info, info.hardfork, info.oiz)
             core.setOutput('hardfork', info.hardfork)
-            core.setOutput('bsc', info.bsc)
+            core.setOutput(' oiz', info.oiz)
 
-      - name: Compare genesis with hardfork bytecode files from BSC repo
+      - name: Compare genesis with hardfork bytecode files from OIZ repo
         run: |
           export HARDFORK=${{ steps.extract_pr_description.outputs.hardfork }}
-          export BSC_URL=${{ steps.extract_pr_description.outputs.bsc }}
+          export OIZ_URL=${{ steps.extract_pr_description.outputs.oiz }}
           ts-node scripts/check-bsc-hardfork-bytecode.ts

@@ -3,13 +3,13 @@ pragma solidity 0.6.4;
 interface ITokenHub {
     function getMiniRelayFee() external view returns (uint256);
 
-    function getContractAddrByBEP2Symbol(bytes32 bep2Symbol) external view returns (address);
+    function getContractAddrByBEP2Symbol(bytes32 oiz2Symbol) external view returns (address);
 
     function getBep2SymbolByContractAddr(address contractAddr) external view returns (bytes32);
 
-    function bindToken(bytes32 bep2Symbol, address contractAddr, uint256 decimals) external;
+    function bindToken(bytes32 oiz2Symbol, address contractAddr, uint256 decimals) external;
 
-    function unbindToken(bytes32 bep2Symbol, address contractAddr) external;
+    function unbindToken(bytes32 oiz2Symbol, address contractAddr) external;
 
     function transferOut(
         address contractAddr,
@@ -22,14 +22,14 @@ interface ITokenHub {
     function cancelTokenRecoverLock(bytes32 tokenSymbol, address attacker) external;
 
     /* solium-disable-next-line */
-    function batchTransferOutBNB(
+    function batchTransferOutOIZ(
         address[] calldata recipientAddrs,
         uint256[] calldata amounts,
         address[] calldata refundAddrs,
         uint64 expireTime
     ) external payable returns (bool);
 
-    function withdrawStakingBNB(uint256 amount) external returns (bool);
+    function withdrawStakingOIZ(uint256 amount) external returns (bool);
 
     function cancelTransferIn(address tokenAddress, address attacker) external;
 }

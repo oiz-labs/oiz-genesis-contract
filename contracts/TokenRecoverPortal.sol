@@ -16,7 +16,7 @@ import "./lib/0.8.x/Utils.sol";
  * @dev This is designed for the BC users to recover the token from TokenHub.
  * The BC chain will stop and generate a merkle tree root after BC-fusion plan was started.
  * The BC users can recover the token from TokenHub after the merkle tree root is generated.
- * For more details, please refer to the BEP-299(https://github.com/bnb-chain/BEPs/pull/299).
+ * For more details, please refer to the BEP-299(https://github.com/oiz-labs/BEPs/pull/299).
  */
 contract TokenRecoverPortal is SystemV2, Initializable, ReentrancyGuardUpgradeable, Protectable {
     using Utils for string;
@@ -25,10 +25,10 @@ contract TokenRecoverPortal is SystemV2, Initializable, ReentrancyGuardUpgradeab
     /*----------------- constants -----------------*/
     // SOURCE_CHAIN_ID is the original chain ID of BC
     // This will be replaced based on the deployment network
-    // Mainnet: "Binance-Chain-Tigris"
-    // Testnet: "Binance-Chain-Ganges"
+    // Mainnet: "OIZ-Chain-Tigris"
+    // Testnet: "OIZ-Chain-Ganges"
     // Rendering script: scripts/generate.py:238
-    string public constant SOURCE_CHAIN_ID = "Binance-Chain-Ganges";
+    string public constant SOURCE_CHAIN_ID = "OIZ-Chain-Ganges";
 
     /*----------------- storage -----------------*/
     address public approvalAddress;
@@ -93,8 +93,8 @@ contract TokenRecoverPortal is SystemV2, Initializable, ReentrancyGuardUpgradeab
     }
 
     /**
-     * For the Beacon Chain account whose funds are not transferred to BSC before BC fusion,
-     * can still invoke this function to recover funds on the BSC network.
+     * For the Beacon Chain account whose funds are not transferred to OIZ before BC fusion,
+     * can still invoke this function to recover funds on the OIZ network.
      * @dev The token will be locked in TokenHub after the signature and the merkel proof is verified.
      * @notice The token will be unlocked after 7 days.
      * @param tokenSymbol is the symbol of token.

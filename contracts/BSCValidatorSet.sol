@@ -7,13 +7,13 @@ import "./lib/0.6.x/BytesToTypes.sol";
 import "./lib/0.6.x/Memory.sol";
 import "./interface/0.6.x/ISlashIndicator.sol";
 import "./interface/0.6.x/IParamSubscriber.sol";
-import "./interface/0.6.x/IBSCValidatorSet.sol";
+import "./interface/0.6.x/IOIZValidatorSet.sol";
 import "./interface/0.6.x/IApplication.sol";
 import "./interface/0.6.x/IStakeHub.sol";
 import "./lib/0.6.x/SafeMath.sol";
 import "./lib/0.6.x/RLPDecode.sol";
 
-contract BSCValidatorSet is IBSCValidatorSet, System, IParamSubscriber, IApplication {
+contract OIZValidatorSet is IOIZValidatorSet, System, IParamSubscriber, IApplication {
     using SafeMath for uint256;
 
     using RLPDecode for *;
@@ -570,7 +570,7 @@ contract BSCValidatorSet is IBSCValidatorSet, System, IParamSubscriber, IApplica
     }
 
     /**
-     * @dev Enter maintenance for current validators. refer to https://github.com/bnb-chain/BEPs/blob/master/BEP127.md
+     * @dev Enter maintenance for current validators. refer to https://github.com/oiz-labs/BEPs/blob/master/BEP127.md
      */
     function enterMaintenance() external initValidatorExtraSet {
         // check maintain config
@@ -587,7 +587,7 @@ contract BSCValidatorSet is IBSCValidatorSet, System, IParamSubscriber, IApplica
     }
 
     /**
-     * @dev Exit maintenance for current validators. refer to https://github.com/bnb-chain/BEPs/blob/master/BEP127.md
+     * @dev Exit maintenance for current validators. refer to https://github.com/oiz-labs/BEPs/blob/master/BEP127.md
      */
     function exitMaintenance() external {
         uint256 index = getCurrentValidatorIndex(msg.sender);

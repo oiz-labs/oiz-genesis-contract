@@ -6,10 +6,10 @@ import "./utils/Deployer.sol";
 
 interface IStakeCredit {
     function balanceOf(address account) external view returns (uint256);
-    function totalPooledBNB() external view returns (uint256);
+    function totalPooledOIZ() external view returns (uint256);
     function totalSupply() external view returns (uint256);
-    function getPooledBNBByShares(uint256 shares) external view returns (uint256);
-    function getSharesByPooledBNB(uint256 bnbAmount) external view returns (uint256);
+    function getPooledOIZByShares(uint256 shares) external view returns (uint256);
+    function getSharesByPooledOIZ(uint256 oizAmount) external view returns (uint256);
 }
 
 contract GovernorTest is Deployer {
@@ -22,7 +22,7 @@ contract GovernorTest is Deployer {
     event RewardDistributed(address indexed operatorAddress, uint256 reward);
     event ValidatorSlashed(address indexed operatorAddress, uint256 jailUntil, uint256 slashAmount, uint8 slashType);
     event ValidatorUnjailed(address indexed operatorAddress);
-    event Claimed(address indexed operatorAddress, address indexed delegator, uint256 bnbAmount);
+    event Claimed(address indexed operatorAddress, address indexed delegator, uint256 oizAmount);
 
     receive() external payable { }
 
@@ -36,22 +36,22 @@ contract GovernorTest is Deployer {
         vm.startPrank(delegator);
 
         // success case
-        uint256 bnbAmount = 100 ether;
-        stakeHub.delegate{ value: bnbAmount }(validator, false);
+        uint256 oizAmount = 100 ether;
+        stakeHub.delegate{ value: oizAmount }(validator, false);
         uint256 shares = IStakeCredit(credit).balanceOf(delegator);
-        assertEq(shares, bnbAmount);
+        assertEq(shares, oizAmount);
 
-        uint256 govBNBBalance = govToken.balanceOf(delegator);
-        assertEq(govBNBBalance, bnbAmount);
+        uint256 govOIZBalance = govToken.balanceOf(delegator);
+        assertEq(govOIZBalance, oizAmount);
 
         assertEq(govToken.getVotes(delegator), 0);
         govToken.delegate(delegator);
-        assertEq(govToken.getVotes(delegator), govBNBBalance);
+        assertEq(govToken.getVotes(delegator), govOIZBalance);
 
         address user2 = _getNextUserAddress();
         govToken.delegate(user2);
         assertEq(govToken.getVotes(delegator), 0);
-        assertEq(govToken.getVotes(user2), govBNBBalance);
+        assertEq(govToken.getVotes(user2), govOIZBalance);
 
         vm.stopPrank();
     }
@@ -62,18 +62,18 @@ contract GovernorTest is Deployer {
         vm.startPrank(delegator);
         assert(governor.proposeStarted());
         vm.deal(delegator, 20_000_000 ether);
-        uint256 bnbAmount = 10_000_000 ether - 2000 ether - 1 ether;
-        stakeHub.delegate{ value: bnbAmount }(validator, false);
+        uint256 oizAmount = 10_000_000 ether - 2000 ether - 1 ether;
+        stakeHub.delegate{ value: oizAmount }(validator, false);
         uint256 shares = IStakeCredit(credit).balanceOf(delegator);
-        assertEq(shares, bnbAmount);
+        assertEq(shares, oizAmount);
 
-        uint256 govBNBBalance = govToken.balanceOf(delegator);
-        assertEq(govBNBBalance, bnbAmount);
+        uint256 govOIZBalance = govToken.balanceOf(delegator);
+        assertEq(govOIZBalance, oizAmount);
 
         assertEq(govToken.getVotes(delegator), 0);
         govToken.delegate(delegator);
-        assertEq(govToken.getVotes(delegator), govBNBBalance);
-        console.log("govBNBBalance", govBNBBalance);
+        assertEq(govToken.getVotes(delegator), govOIZBalance);
+        console.log("govOIZBalance", govOIZBalance);
 
         // text Propose
         address[] memory targets;
@@ -97,29 +97,29 @@ contract GovernorTest is Deployer {
         //        assertEq(governor.proposeStarted(), true, "propose should not start");
 
         // mainnet totalSupply is already enough
-        // // govBNB totalSupply not enough
+        // // govOIZ totalSupply not enough
         // string memory description = "test";
         // vm.expectRevert();
         // uint256 proposalId = governor.propose(targets, values, calldatas, description);
         // assertEq(governor.proposeStarted(), false, "propose should not start");
         //
-        // bnbAmount = 1 ether;
-        // stakeHub.delegate{ value: bnbAmount }(validator, false);
+        // oizAmount = 1 ether;
+        // stakeHub.delegate{ value: oizAmount }(validator, false);
         // proposalId = governor.propose(targets, values, calldatas, description);
         // assertEq(governor.proposeStarted(), true, "propose should start");
         //
-        // bnbAmount = 10000000 ether - 2000 ether;
-        // govBNBBalance = govToken.balanceOf(delegator);
-        // console.log("govBNBBalance", govBNBBalance);
-        // assertEq(govBNBBalance, bnbAmount);
-        // assertEq(govToken.getVotes(delegator), govBNBBalance);
+        // oizAmount = 10000000 ether - 2000 ether;
+        // govOIZBalance = govToken.balanceOf(delegator);
+        // console.log("govOIZBalance", govOIZBalance);
+        // assertEq(govOIZBalance, oizAmount);
+        // assertEq(govToken.getVotes(delegator), govOIZBalance);
         // console.log("voting power before undelegate", govToken.getVotes(delegator));
 
         // voting power changed after undelegating staking share
-        bnbAmount = 1 ether;
-        stakeHub.undelegate(validator, bnbAmount);
+        oizAmount = 1 ether;
+        stakeHub.undelegate(validator, oizAmount);
         console.log("voting power after undelegate", govToken.getVotes(delegator));
-        assertEq(govToken.getVotes(delegator), govBNBBalance - bnbAmount);
+        assertEq(govToken.getVotes(delegator), govOIZBalance - oizAmount);
     }
 
     function testProposalNotApproved() public {
@@ -128,23 +128,23 @@ contract GovernorTest is Deployer {
         vm.startPrank(delegator);
         assert(governor.proposeStarted());
         vm.deal(delegator, 20_000_000 ether);
-        uint256 bnbAmount = 10_000_000 ether - 2000 ether;
-        stakeHub.delegate{ value: bnbAmount }(validator, false);
+        uint256 oizAmount = 10_000_000 ether - 2000 ether;
+        stakeHub.delegate{ value: oizAmount }(validator, false);
 
         assertEq(govToken.getVotes(delegator), 0);
         govToken.delegate(delegator);
-        assertEq(govToken.getVotes(delegator), bnbAmount);
+        assertEq(govToken.getVotes(delegator), oizAmount);
         console.log("govToken.getVotes(delegator)", govToken.getVotes(delegator));
 
         address delegator2 = _getNextUserAddress();
         vm.startPrank(delegator2);
         vm.deal(delegator2, 20_000_000 ether);
-        bnbAmount = 10_000_000 ether;
-        stakeHub.delegate{ value: bnbAmount }(validator, false);
+        oizAmount = 10_000_000 ether;
+        stakeHub.delegate{ value: oizAmount }(validator, false);
 
         assertEq(govToken.getVotes(delegator2), 0);
         govToken.delegate(delegator2);
-        assertEq(govToken.getVotes(delegator2), bnbAmount);
+        assertEq(govToken.getVotes(delegator2), oizAmount);
         console.log("govToken.getVotes(delegator2)", govToken.getVotes(delegator2));
         vm.stopPrank();
 
@@ -186,23 +186,23 @@ contract GovernorTest is Deployer {
         vm.startPrank(delegator);
         assert(governor.proposeStarted());
         vm.deal(delegator, 20_000_000 ether);
-        uint256 bnbAmount = 10_000_000 ether - 2000 ether;
-        stakeHub.delegate{ value: bnbAmount }(validator, false);
+        uint256 oizAmount = 10_000_000 ether - 2000 ether;
+        stakeHub.delegate{ value: oizAmount }(validator, false);
 
         assertEq(govToken.getVotes(delegator), 0);
         govToken.delegate(delegator);
-        assertEq(govToken.getVotes(delegator), bnbAmount);
+        assertEq(govToken.getVotes(delegator), oizAmount);
         console.log("govToken.getVotes(delegator)", govToken.getVotes(delegator));
 
         address delegator2 = _getNextUserAddress();
         vm.startPrank(delegator2);
         vm.deal(delegator2, 20_000_000 ether);
-        bnbAmount = bnbAmount / 10;
-        stakeHub.delegate{ value: bnbAmount }(validator, false);
+        oizAmount = oizAmount / 10;
+        stakeHub.delegate{ value: oizAmount }(validator, false);
 
         assertEq(govToken.getVotes(delegator2), 0);
         govToken.delegate(delegator2);
-        assertEq(govToken.getVotes(delegator2), bnbAmount);
+        assertEq(govToken.getVotes(delegator2), oizAmount);
         console.log("govToken.getVotes(delegator2)", govToken.getVotes(delegator2));
         vm.stopPrank();
 
@@ -254,17 +254,17 @@ contract GovernorTest is Deployer {
 
         vm.deal(delegator, 20_000_000 ether);
 
-        uint256 bnbAmount = 10_000_000 ether;
-        stakeHub.delegate{ value: bnbAmount }(validator, false);
+        uint256 oizAmount = 10_000_000 ether;
+        stakeHub.delegate{ value: oizAmount }(validator, false);
         uint256 shares = IStakeCredit(credit).balanceOf(delegator);
-        assertEq(shares, bnbAmount);
+        assertEq(shares, oizAmount);
 
-        uint256 govBNBBalance = govToken.balanceOf(delegator);
-        assertEq(govBNBBalance, bnbAmount);
+        uint256 govOIZBalance = govToken.balanceOf(delegator);
+        assertEq(govOIZBalance, oizAmount);
 
         assertEq(govToken.getVotes(delegator), 0);
         govToken.delegate(delegator);
-        assertEq(govToken.getVotes(delegator), govBNBBalance);
+        assertEq(govToken.getVotes(delegator), govOIZBalance);
 
         // text Propose
         address[] memory targets;
@@ -332,17 +332,17 @@ contract GovernorTest is Deployer {
 
         vm.deal(delegator, 20_000_000 ether);
 
-        uint256 bnbAmount = 10_000_000 ether;
-        stakeHub.delegate{ value: bnbAmount }(validator, false);
+        uint256 oizAmount = 10_000_000 ether;
+        stakeHub.delegate{ value: oizAmount }(validator, false);
         uint256 shares = IStakeCredit(credit).balanceOf(delegator);
-        assertEq(shares, bnbAmount);
+        assertEq(shares, oizAmount);
 
-        uint256 govBNBBalance = govToken.balanceOf(delegator);
-        assertEq(govBNBBalance, bnbAmount);
+        uint256 govOIZBalance = govToken.balanceOf(delegator);
+        assertEq(govOIZBalance, oizAmount);
 
         assertEq(govToken.getVotes(delegator), 0);
         govToken.delegate(delegator);
-        assertEq(govToken.getVotes(delegator), govBNBBalance);
+        assertEq(govToken.getVotes(delegator), govOIZBalance);
 
         // text Propose
         address[] memory targets;
@@ -406,8 +406,8 @@ contract GovernorTest is Deployer {
         (address validator,, address credit,) = _createValidator(2000 ether);
         vm.startPrank(delegator);
 
-        uint256 bnbAmount = 100 ether;
-        stakeHub.delegate{ value: bnbAmount }(validator, false);
+        uint256 oizAmount = 100 ether;
+        stakeHub.delegate{ value: oizAmount }(validator, false);
         uint256 shares = IStakeCredit(credit).balanceOf(delegator);
 
         // failed with not enough shares
@@ -425,10 +425,10 @@ contract GovernorTest is Deployer {
         vm.warp(block.timestamp + 7 days);
         uint256 balanceBefore = delegator.balance;
         vm.expectEmit(true, true, false, true, address(stakeHub));
-        emit Claimed(validator, delegator, bnbAmount / 2);
+        emit Claimed(validator, delegator, oizAmount / 2);
         stakeHub.claim(validator, 0);
         uint256 balanceAfter = delegator.balance;
-        assertEq(balanceAfter - balanceBefore, bnbAmount / 2);
+        assertEq(balanceAfter - balanceBefore, oizAmount / 2);
 
         vm.stopPrank();
     }
@@ -439,8 +439,8 @@ contract GovernorTest is Deployer {
         (address validator,, address credit,) = _createValidator(selfDelegation);
         uint256 _totalShares = IStakeCredit(credit).totalSupply();
         assertEq(_totalShares, selfDelegation + toLock, "wrong total shares");
-        uint256 _totalPooledBNB = IStakeCredit(credit).totalPooledBNB();
-        assertEq(_totalPooledBNB, selfDelegation + toLock, "wrong total pooled BNB");
+        uint256 _totalPooledOIZ = IStakeCredit(credit).totalPooledOIZ();
+        assertEq(_totalPooledOIZ, selfDelegation + toLock, "wrong total pooled OIZ");
 
         vm.startPrank(validator);
 
@@ -448,15 +448,15 @@ contract GovernorTest is Deployer {
         stakeHub.undelegate(validator, selfDelegation);
         _totalShares = IStakeCredit(credit).totalSupply();
         assertEq(_totalShares, toLock, "wrong total shares");
-        _totalPooledBNB = IStakeCredit(credit).totalPooledBNB();
-        assertEq(_totalPooledBNB, toLock, "wrong total pooled BNB");
+        _totalPooledOIZ = IStakeCredit(credit).totalPooledOIZ();
+        assertEq(_totalPooledOIZ, toLock, "wrong total pooled OIZ");
 
         // 2. delegate again
         stakeHub.delegate{ value: selfDelegation }(validator, false);
         _totalShares = IStakeCredit(credit).totalSupply();
         assertEq(_totalShares, selfDelegation + toLock, "wrong total shares");
-        _totalPooledBNB = IStakeCredit(credit).totalPooledBNB();
-        assertEq(_totalPooledBNB, selfDelegation + toLock, "wrong total pooled BNB");
+        _totalPooledOIZ = IStakeCredit(credit).totalPooledOIZ();
+        assertEq(_totalPooledOIZ, selfDelegation + toLock, "wrong total pooled OIZ");
 
         vm.stopPrank();
     }

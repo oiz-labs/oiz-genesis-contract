@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.10;
 
-interface BSCValidatorSet {
+interface OIZValidatorSet {
     event batchTransfer(uint256 amount);
     event batchTransferFailed(uint256 indexed amount, string reason);
     event batchTransferLowerFailed(uint256 indexed amount, bytes reason);
@@ -75,7 +75,7 @@ interface BSCValidatorSet {
     function VALIDATOR_CONTRACT_ADDR() external view returns (address);
     function alreadyInit() external view returns (bool);
     function systemRewardAntiMEVRatio() external view returns (uint256);
-    function bscChainID() external view returns (uint16);
+    function oizChainID() external view returns (uint16);
     function burnRatio() external view returns (uint256);
     function burnRatioInitialized() external view returns (bool);
     function canEnterMaintenance(uint256 index) external view returns (bool);

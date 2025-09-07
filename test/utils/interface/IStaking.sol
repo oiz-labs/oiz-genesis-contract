@@ -37,7 +37,7 @@ interface Staking {
     function CROSS_CHAIN_CONTRACT_ADDR() external view returns (address);
     function CROSS_STAKE_CHANNELID() external view returns (uint8);
     function ERROR_FAIL_DECODE() external view returns (uint32);
-    function ERROR_WITHDRAW_BNB() external view returns (uint32);
+    function ERROR_WITHDRAW_OIZ() external view returns (uint32);
     function EVENT_DELEGATE() external view returns (uint8);
     function EVENT_DISTRIBUTE_REWARD() external view returns (uint8);
     function EVENT_DISTRIBUTE_UNDELEGATED() external view returns (uint8);
@@ -48,7 +48,7 @@ interface Staking {
     function GOV_HUB_ADDR() external view returns (address);
     function GOV_TOKEN_ADDR() external view returns (address);
     function INCENTIVIZE_ADDR() external view returns (address);
-    function INIT_BSC_RELAYER_FEE() external view returns (uint256);
+    function INIT_OIZ_RELAYER_FEE() external view returns (uint256);
     function INIT_MIN_DELEGATION() external view returns (uint256);
     function INIT_RELAYER_FEE() external view returns (uint256);
     function INIT_TRANSFER_GAS() external view returns (uint256);
@@ -72,7 +72,7 @@ interface Staking {
     function VALIDATOR_CONTRACT_ADDR() external view returns (address);
     function alreadyInit() external view returns (bool);
     function bSCRelayerFee() external view returns (uint256);
-    function bscChainID() external view returns (uint16);
+    function oizChainID() external view returns (uint16);
     function claimReward() external returns (uint256 amount);
     function claimUndelegated() external returns (uint256 amount);
     function delegate(address, uint256) external payable;

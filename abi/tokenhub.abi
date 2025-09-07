@@ -31,7 +31,7 @@
   },
   {
     "type": "function",
-    "name": "BEP2_TOKEN_SYMBOL_FOR_BNB",
+    "name": "BEP2_TOKEN_SYMBOL_FOR_OIZ",
     "inputs": [],
     "outputs": [
       {
@@ -174,7 +174,7 @@
   },
   {
     "type": "function",
-    "name": "INIT_BNB_LARGE_TRANSFER_LIMIT",
+    "name": "INIT_OIZ_LARGE_TRANSFER_LIMIT",
     "inputs": [],
     "outputs": [
       {
@@ -239,7 +239,7 @@
   },
   {
     "type": "function",
-    "name": "MAXIMUM_BEP20_SYMBOL_LEN",
+    "name": "MAXIMUM_OIZ20_SYMBOL_LEN",
     "inputs": [],
     "outputs": [
       {
@@ -265,7 +265,7 @@
   },
   {
     "type": "function",
-    "name": "MAX_GAS_FOR_CALLING_BEP20",
+    "name": "MAX_GAS_FOR_CALLING_OIZ20",
     "inputs": [],
     "outputs": [
       {
@@ -278,7 +278,7 @@
   },
   {
     "type": "function",
-    "name": "MAX_GAS_FOR_TRANSFER_BNB",
+    "name": "MAX_GAS_FOR_TRANSFER_OIZ",
     "inputs": [],
     "outputs": [
       {
@@ -291,7 +291,7 @@
   },
   {
     "type": "function",
-    "name": "MINIMUM_BEP20_SYMBOL_LEN",
+    "name": "MINIMUM_OIZ20_SYMBOL_LEN",
     "inputs": [],
     "outputs": [
       {
@@ -616,7 +616,7 @@
   },
   {
     "type": "function",
-    "name": "batchTransferOutBNB",
+    "name": "batchTransferOutOIZ",
     "inputs": [
       {
         "name": "recipientAddrs",
@@ -650,7 +650,7 @@
   },
   {
     "type": "function",
-    "name": "bep20ContractDecimals",
+    "name": "oiz20ContractDecimals",
     "inputs": [
       {
         "name": "",
@@ -672,7 +672,7 @@
     "name": "bindToken",
     "inputs": [
       {
-        "name": "bep2Symbol",
+        "name": "oiz2Symbol",
         "type": "bytes32",
         "internalType": "bytes32"
       },
@@ -692,7 +692,7 @@
   },
   {
     "type": "function",
-    "name": "bscChainID",
+    "name": "oizChainID",
     "inputs": [],
     "outputs": [
       {
@@ -825,7 +825,7 @@
     "name": "getBoundContract",
     "inputs": [
       {
-        "name": "bep2Symbol",
+        "name": "oiz2Symbol",
         "type": "string",
         "internalType": "string"
       }
@@ -844,7 +844,7 @@
     "name": "getContractAddrByBEP2Symbol",
     "inputs": [
       {
-        "name": "bep2Symbol",
+        "name": "oiz2Symbol",
         "type": "bytes32",
         "internalType": "bytes32"
       }
@@ -1040,7 +1040,7 @@
     "name": "setLargeTransferLimit",
     "inputs": [
       {
-        "name": "bep20Token",
+        "name": "oiz20Token",
         "type": "address",
         "internalType": "address"
       },
@@ -1092,7 +1092,7 @@
     "name": "unbindToken",
     "inputs": [
       {
-        "name": "bep2Symbol",
+        "name": "oiz2Symbol",
         "type": "bytes32",
         "internalType": "bytes32"
       },
@@ -1125,7 +1125,7 @@
   },
   {
     "type": "function",
-    "name": "withdrawStakingBNB",
+    "name": "withdrawStakingOIZ",
     "inputs": [
       {
         "name": "amount",
@@ -1402,7 +1402,7 @@
     "name": "refundFailure",
     "inputs": [
       {
-        "name": "bep20Addr",
+        "name": "oiz20Addr",
         "type": "address",
         "indexed": false,
         "internalType": "address"
@@ -1433,7 +1433,7 @@
     "name": "refundSuccess",
     "inputs": [
       {
-        "name": "bep20Addr",
+        "name": "oiz20Addr",
         "type": "address",
         "indexed": false,
         "internalType": "address"
@@ -1483,7 +1483,7 @@
     "name": "transferInSuccess",
     "inputs": [
       {
-        "name": "bep20Addr",
+        "name": "oiz20Addr",
         "type": "address",
         "indexed": false,
         "internalType": "address"
@@ -1508,7 +1508,7 @@
     "name": "transferOutSuccess",
     "inputs": [
       {
-        "name": "bep20Addr",
+        "name": "oiz20Addr",
         "type": "address",
         "indexed": false,
         "internalType": "address"

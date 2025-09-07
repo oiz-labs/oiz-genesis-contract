@@ -2,16 +2,16 @@ pragma solidity ^0.8.10;
 
 import "forge-std/Test.sol";
 
-import "./utils/interface/IBSCValidatorSetTool.sol";
+import "./utils/interface/IOIZValidatorSetTool.sol";
 
 contract ToolTest is Test {
-    BSCValidatorSetTool public tool;
+    OIZValidatorSetTool public tool;
 
     function setUp() public {
         // deploy tool contract
-        address toolAddr = deployCode("BSCValidatorSetTool.sol");
-        tool = BSCValidatorSetTool(toolAddr);
-        vm.label(toolAddr, "BSCValidatorSetTool");
+        address toolAddr = deployCode("OIZValidatorSetTool.sol");
+        tool = OIZValidatorSetTool(toolAddr);
+        vm.label(toolAddr, "OIZValidatorSetTool");
     }
 
     function testDecodeHeader() public {
